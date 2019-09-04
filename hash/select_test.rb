@@ -15,4 +15,4 @@ immidiate_family = family.select do |closness, name|
 end
 
 puts immidiate_family
-puts immidiate_family.values.flatten
+puts immidiate_family.values
