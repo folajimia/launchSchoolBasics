@@ -1,0 +1,20 @@
+
+en:
+  welcome: "Welcome to the calculator app. Please enter your name:"
+  valid_name: "Please use a valid name"
+  first_number_text: "Please enter the first number"
+  invalid_number: "That does not look like a valid number"
+  second_number_text: "Please enter the second number"
+  choose_number: "must choose 1,2,3 or 4"
+  calculate_again: "Do you want to perform another calculation?
+    Enter Y to calculate again"
+  thanks: "Thank you for using my calculator. Good bye"
+dk:
+  welcome: "Velkommen til lommeregner-appen. Indtast dit navn:"
+  valid_name: "Brug et gyldigt navn"
+  first_number_text: "Indtast det første nummer"
+  invalid_number: "Det ligner ikke et gyldigt nummer"
+  second_number_text: "Indtast det andet nummer"
+  choose_number: "skal vælge 1,2,3 eller 4"
+  calculate_again: "Vil du udføre en anden beregning? Indtast Y for at beregne igen "
+  thanks: "Tak, fordi du brugte min lommeregner. Farvel"

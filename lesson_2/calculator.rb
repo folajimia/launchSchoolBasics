@@ -1,13 +1,30 @@
+require 'yaml'
+MESSAGES = YAML.load_file('calculator_messages.yml')
+
+LANGUAGE = 'dk'
+
+def messages(message, lang='dk')
+  MESSAGES[lang][message]
+end
+
 def prompt(message)
   puts "=> #{message}"
 end
 
+def valid_float?(num)
+  num.to_f.to_s !=0
+end
+
+def valid_integer?(num)
+  num.to_i.to_s !=0
+end
+
 def valid_number?(num)
-  num.to_i != 0
+  valid_float?(num)||valid_integer?(num)
 end
 
 def operation_to_message(opp)
-  case opp
+  word = case opp
   when '1'
     'adding'
   when '2'
@@ -17,15 +34,16 @@ def operation_to_message(opp)
   when '4'
     'dividing'
   end
+  word
 end
 
 first_number = ''
-prompt("Welcome to the calculator app. Please enter your name:")
+prompt(messages('welcome', LANGUAGE))
 name = ''
 loop do
   name = gets.chomp
   if name.empty?
-    prompt("Please use a valid name")
+    prompt(messages('valid_name', LANGUAGE))
   else
     break
   end
@@ -34,25 +52,27 @@ puts('-' * 40)
 puts("Hi #{name}")
 loop do
   loop do
-    prompt("Please enter the first number")
+    #require 'byebug'
+    #byebug
+    prompt(messages('first_number_text', LANGUAGE))
     first_number = gets.chomp
 
     if valid_number?(first_number)
       break
     else
-      prompt("That does not look like a valid number")
+      prompt(messages('invalid_number', LANGUAGE))
     end
   end
 
   second_number = ''
   loop do
-    prompt("Please enter the second number")
-    second_number = gets.chomp
+    prompt(messages('second_number_text', LANGUAGE))
+    second_number_text = gets.chomp
 
     if valid_number?(second_number)
       break
     else
-      prompt("That does not look like a valid number")
+      prompt(messages('invalid_number', LANGUAGE))
     end
   end
 
@@ -72,7 +92,7 @@ loop do
     if %w(1 2 3 4).include?(operator)
       break
     else
-      prompt("must choose 1,2,3 or 4")
+      prompt(messages('choose_number', LANGUAGE))
     end
   end
 
@@ -91,9 +111,8 @@ loop do
 
   prompt("The result is #{answer}")
 
-  prompt("Do you want to perform another calculation?
-    Enter Y to calculate again")
+  prompt(messages('calculate_again', LANGUAGE))
   answer = gets.chomp
   break unless answer.downcase.start_with?('y')
 end
-prompt("Thank you for using my calculator. Good bye")
+prompt(messages('thanks', LANGUAGE))
