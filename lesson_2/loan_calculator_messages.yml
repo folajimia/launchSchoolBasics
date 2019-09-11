@@ -1,0 +1,10 @@
+
+en:
+  welcome: "Welcome to jimis loan calulator"
+  enter_name: "please enter your name"
+  valid_name: "please enter a valid name"
+  invalid_number: "The number you entered is invalid"
+  annual_percentage: "Please enter the annual percentage rate without the percentage sign"
+  loan_duration_m: "Please enter the loan duration"
+  calculate_again: "Do you need to calculate another monthly payment? if you do enter y"
+  thanks_u: "Thank you for using me"
