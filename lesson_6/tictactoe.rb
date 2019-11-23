@@ -1,4 +1,4 @@
-require 'pry'
+require 'byebug'
 
 INITIAL_MARKER = ' '
 PLAYER_MARKER = 'X'
@@ -10,6 +10,30 @@ WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
 
 def prompt(msg)
   puts msg.to_s
+end
+
+def joinor(arr, delimiter=',', word='or')
+  case arr.size
+  when 0 then ''
+  when 1 then arr.first
+  when 2 then arr.join(" #{word} ")
+  else
+    arr[-1] = "#{word} #{arr.last}"
+    arr.join(delimiter)
+  end
+end
+
+def find_at_risk_square(line, brd, marker)
+  if brd.values_at(*line).count(marker) == 2
+    brd.select{|k,v| line.include?(k) && v == ' '}.keys.first
+  else
+    nil
+  end
+end
+
+def select_to_five(brd, marker)
+  brd[5]= marker
+  brd
 end
 
 # rubocop:disable Metrics/AbcSize
@@ -43,9 +67,28 @@ def empty_squares(brd)
 end
 
 def computer_places_pieces(brd)
-  square = empty_squares(brd).sample
+  square = nil
+
+  WINNING_LINES.each do |line|
+    square = find_at_risk_square(line, brd,  COMPUTER_MARKER)
+    break if square
+  end
+
+  if !square
+    WINNING_LINES.each do |line|
+      square = find_at_risk_square(line, brd, PLAYER_MARKER)
+      break if square
+    end
+  end
+
+  if !square && brd[5] == INITIAL_MARKER
+    square = select_to_five(brd, COMPUTER_MARKER)
+  else
+    square = empty_squares(brd).sample
+  end
   brd[square] = COMPUTER_MARKER
 end
+
 
 def board_full?(brd)
   empty_squares(brd).empty?
@@ -81,20 +124,53 @@ def player_places_pieces(brd)
   brd[square] = PLAYER_MARKER
 end
 
+def place_piece!(board, current_player)
+  if current_player == 'player'
+    player_places_pieces(board)
+  else
+    computer_places_pieces(board)
+  end
+end
+
+def alternate_player(current_player)
+  if current_player == 'player'
+    return 'computer'
+  else
+    return 'player'
+  end
+end
+
+def select_first_player
+  loop do
+    prompt "Choose who will play first, Computer ? or Player ?"
+    prompt "Type 1 for the player to start"
+    prompt "Type 2 for the computer to start"
+    choice = gets.chomp
+    if choice == '1'
+      return 'player'
+      break
+    elsif choice == '2'
+      return 'computer'
+      break
+    else
+      prompt "you can only pick 1 for  player or 2 for computer"
+    end
+  end
+end
+
+#Execution starts
 loop do
   board = initialize_board
+  current_player = select_first_player
 
   loop do
     display_board(board)
-    player_places_pieces(board)
-    break if someone_won?(board) || board_full?(board)
-
-    computer_places_pieces(board)
+    place_piece!(board, current_player)
+    current_player = alternate_player(current_player)
+    display_board(board)
     break if someone_won?(board) || board_full?(board)
   end
-
-  display_board(board)
-
+  #display_board(board)
   if someone_won?(board)
     prompt "#{detect_winner(board)} won!"
   else
